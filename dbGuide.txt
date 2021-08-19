@@ -1,0 +1,16 @@
+Database Guide
+==============
+
+Blog Table Schema
+1) id - int
+2) author_id - int
+3) snippet - string/text/varchar2
+4) created - date
+5) content - text
+6) title - varchar
+
+
+Author Table Schema
+1) id - int
+2) lastname - string/varchar
+3) firstname - string/varchar
