@@ -1,4 +1,5 @@
 const newsDB = require("../schema/db");
+const { validateBlogRequestBody } = require("../validation");
 
 function getAllBlogs(req, res) {
   newsDB.connect().getConnection(function (err, connection) {
@@ -32,13 +33,14 @@ function getSingleBlog(req, res) {
 }
 
 function postSingleBlog(req, res) {
-  const requestBody = req.body;
+  const { error } = validateBlogRequestBody(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
 
   newsDB.connect().getConnection(function (err, connect) {
     if (err) throw err;
 
     connect.query(
-      `INSERT INTO blogs(title, snippet, content, author_id, date_created) VALUES('${requestBody.title}', '${requestBody.snippet}', '${requestBody.content}', '${requestBody.author_id}', '${requestBody.date_created}');`,
+      `INSERT INTO blogs(title, snippet, content, author_id, date_created) VALUES("${req.body.title}", "${req.body.snippet}", "${req.body.content}", "${req.body.author_id}", "${req.body.date_created}");`,
       function (query_err, data) {
         connect.release();
 
